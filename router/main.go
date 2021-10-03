@@ -28,7 +28,7 @@ func main() {
 	flag.Parse()
 
 	// open serial port
-	sp, _ = serial.Open(port, &serial.Mode{BaudRate: 115200})
+	sp, _ = serial.Open(port, &serial.Mode{BaudRate: 9600})
 	reader := bufio.NewReader(sp)
 
 	// open commander connection to MIDI
@@ -36,12 +36,13 @@ func main() {
 
 	// start listening for MIDI messages coming from serial port
 	for {
-		_, err := io.ReadAtLeast(reader, msg[:], 3)
+		n, err := io.ReadFull(reader, msg[:])
 		if err != nil {
 			fmt.Println(err)
 		}
 
-		fmt.Println("msg received")
-		cmdr.WriteShort(msg[:])
+		if n > 0 {
+			cmdr.WriteShort(msg[:])
+		}
 	}
 }
