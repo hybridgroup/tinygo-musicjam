@@ -18,7 +18,7 @@ func NewCommander(id int) *Commander {
 		panic(err)
 	}
 	fmt.Println("[INFO] total MIDI devices:", portmidi.CountDevices())
-
+	fmt.Println(portmidi.Info(portmidi.DeviceID(id)))
 	out, err := portmidi.NewOutputStream(portmidi.DeviceID(id), 1024, 0)
 	if err != nil {
 		log.Fatal(err)

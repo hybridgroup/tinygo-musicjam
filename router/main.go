@@ -41,6 +41,7 @@ func main() {
 			fmt.Println(err)
 		}
 
+		fmt.Println("msg received")
 		cmdr.WriteShort(msg[:])
 	}
 }

@@ -26,8 +26,9 @@ var (
 	buttonBb machine.Pin = machine.D12
 	buttonB  machine.Pin = machine.D13
 
-	keys [12]Key
-	cmdr *commands.Commander
+	keys        [12]Key
+	cmdr        *commands.Commander
+	midichannel uint8 = 1
 )
 
 func main() {
@@ -46,12 +47,12 @@ func readButtons() {
 	for i := 0; i < 12; i++ {
 		if keys[i].button.Get() {
 			if keys[i].pressed {
-				cmdr.NoteOn(0, uint8(i+58), 100)
+				cmdr.NoteOn(midichannel, uint8(i+58), 100)
 				keys[i].pressed = false
 			}
 		} else {
 			if !keys[i].pressed {
-				cmdr.NoteOff(0, uint8(i+58), 100)
+				cmdr.NoteOff(midichannel, uint8(i+58), 100)
 				keys[i].pressed = true
 			}
 		}
