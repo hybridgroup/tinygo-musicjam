@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 
@@ -17,9 +18,15 @@ var (
 	msg      [3]byte
 )
 
-// TODO: get device ID and serial port from flags
+func init() {
+	flag.IntVar(&deviceid, "deviceid", 0, "MIDI device to forward messages")
+	flag.StringVar(&port, "port", "/dev/ttyACM0", "serial port")
+}
 
 func main() {
+	// get device ID and serial port from flags
+	flag.Parse()
+
 	// open serial port
 	sp, _ = serial.Open(port, &serial.Mode{BaudRate: 115200})
 	reader := bufio.NewReader(sp)
