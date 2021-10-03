@@ -7,10 +7,20 @@ import (
 	"github.com/hybridgroup/tinymusicjam/controller/commands"
 )
 
+type KeyState int
+
+const (
+	KeyNeverPressed KeyState = 0
+	KeyPress                 = 1
+	KeyRelease               = 2
+)
+
 type Key struct {
-	button  machine.Pin
-	pressed bool
+	button machine.Pin
+	state  KeyState
 }
+
+const numberOfKeys = 1
 
 var (
 	buttonC  machine.Pin = machine.D2
@@ -28,7 +38,7 @@ var (
 
 	keys        [12]Key
 	cmdr        *commands.Commander
-	midichannel uint8 = 1
+	midichannel uint8 = 0 // MIDI channels are 0-15 e.g. 1-16
 )
 
 func main() {
@@ -44,34 +54,38 @@ func main() {
 }
 
 func readButtons() {
-	for i := 0; i < 12; i++ {
+	for i := 0; i < numberOfKeys; i++ {
 		if keys[i].button.Get() {
-			if keys[i].pressed {
-				cmdr.NoteOn(midichannel, uint8(i+58), 100)
-				keys[i].pressed = false
+			if keys[i].state == KeyPress {
+				continue
 			}
+
+			cmdr.NoteOn(midichannel, uint8(i+60), 100)
+			keys[i].state = KeyPress
 		} else {
-			if !keys[i].pressed {
-				cmdr.NoteOff(midichannel, uint8(i+58), 100)
-				keys[i].pressed = true
+			if keys[i].state != KeyPress {
+				continue
 			}
+
+			cmdr.NoteOff(midichannel, uint8(i+60), 100)
+			keys[i].state = KeyRelease
 		}
 	}
 }
 
 func initButtons() {
-	buttonC.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonDb.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonD.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonEb.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonE.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonF.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonGb.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonG.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonAb.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonA.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonBb.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-	buttonB.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
+	buttonC.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonDb.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonD.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonEb.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonE.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonF.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonGb.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonG.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonAb.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonA.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonBb.Configure(machine.PinConfig{Mode: machine.PinInput})
+	buttonB.Configure(machine.PinConfig{Mode: machine.PinInput})
 
 	keys[0] = Key{button: buttonC}
 	keys[1] = Key{button: buttonDb}

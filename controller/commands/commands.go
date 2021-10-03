@@ -9,8 +9,6 @@ type Commander struct {
 }
 
 func NewCommander() *Commander {
-	// TODO: use open serial interface
-
 	return &Commander{}
 }
 
@@ -30,8 +28,5 @@ func (c *Commander) SendCC(channel, control, value uint8) {
 }
 
 func (c *Commander) send() {
-	// for i := 0; i < len(c.msg); i++ {
-	// 	machine.Serial.WriteByte(c.msg[i])
-	// }
 	machine.Serial.Write(c.msg[:])
 }
