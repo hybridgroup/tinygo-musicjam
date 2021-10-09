@@ -4,8 +4,8 @@ import (
 	"machine"
 	"time"
 
-	"github.com/hybridgroup/tinymusicjam/controller/commands"
 	"github.com/hybridgroup/tinymusicjam/controller/makeybutton"
+	"github.com/hybridgroup/tinymusicjam/controller/midi"
 )
 
 const (
@@ -28,13 +28,13 @@ var (
 	buttonB  machine.Pin = machine.D13
 
 	keys        [12]*makeybutton.Button
-	cmdr        *commands.Commander
+	sender      *midi.Sender
 	midichannel uint8 = 0 // MIDI channels are 0-15 e.g. 1-16
 )
 
 func main() {
-	// open commander connection to serial
-	cmdr = commands.NewCommander()
+	// open MIDI connection to serial
+	sender = midi.NewSender()
 
 	initKeys()
 
@@ -48,9 +48,9 @@ func readKeys() {
 	for key := 0; key < numberOfKeys; key++ {
 		switch keys[key].Get() {
 		case makeybutton.Pressed:
-			cmdr.NoteOn(midichannel, uint8(middleC+key), 100)
+			sender.NoteOn(midichannel, uint8(middleC+key), 100)
 		case makeybutton.Released:
-			cmdr.NoteOff(midichannel, uint8(middleC+key), 100)
+			sender.NoteOff(midichannel, uint8(middleC+key), 100)
 		}
 	}
 }
