@@ -7,20 +7,10 @@ import (
 	"github.com/hybridgroup/tinymusicjam/controller/commands"
 )
 
-type KeyState int
-
 const (
-	KeyNeverPressed KeyState = 0
-	KeyPress                 = 1
-	KeyRelease               = 2
+	numberOfKeys = 1
+	middleC      = 60
 )
-
-type Key struct {
-	button machine.Pin
-	state  KeyState
-}
-
-const numberOfKeys = 1
 
 var (
 	buttonC  machine.Pin = machine.D2
@@ -45,58 +35,36 @@ func main() {
 	// open commander connection to serial
 	cmdr = commands.NewCommander()
 
-	initButtons()
+	initKeys()
 
 	for {
-		readButtons()
+		readKeys()
 		time.Sleep(30 * time.Millisecond)
 	}
 }
 
-func readButtons() {
-	for i := 0; i < numberOfKeys; i++ {
-		if keys[i].button.Get() {
-			if keys[i].state == KeyPress {
-				continue
-			}
-
-			cmdr.NoteOn(midichannel, uint8(i+60), 100)
-			keys[i].state = KeyPress
-		} else {
-			if keys[i].state != KeyPress {
-				continue
-			}
-
-			cmdr.NoteOff(midichannel, uint8(i+60), 100)
-			keys[i].state = KeyRelease
+func readKeys() {
+	for key := 0; key < numberOfKeys; key++ {
+		switch keys[key].Get() {
+		case KeyPressed:
+			cmdr.NoteOn(midichannel, uint8(middleC+key), 100)
+		case KeyReleased:
+			cmdr.NoteOff(midichannel, uint8(middleC+key), 100)
 		}
 	}
 }
 
-func initButtons() {
-	buttonC.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonDb.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonD.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonEb.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonE.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonF.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonGb.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonG.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonAb.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonA.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonBb.Configure(machine.PinConfig{Mode: machine.PinInput})
-	buttonB.Configure(machine.PinConfig{Mode: machine.PinInput})
-
-	keys[0] = Key{button: buttonC}
-	keys[1] = Key{button: buttonDb}
-	keys[2] = Key{button: buttonD}
-	keys[3] = Key{button: buttonEb}
-	keys[4] = Key{button: buttonE}
-	keys[5] = Key{button: buttonF}
-	keys[6] = Key{button: buttonGb}
-	keys[7] = Key{button: buttonG}
-	keys[8] = Key{button: buttonAb}
-	keys[9] = Key{button: buttonA}
-	keys[10] = Key{button: buttonBb}
-	keys[11] = Key{button: buttonB}
+func initKeys() {
+	keys[0] = NewKey(buttonC)
+	keys[1] = NewKey(buttonDb)
+	keys[2] = NewKey(buttonD)
+	keys[3] = NewKey(buttonEb)
+	keys[4] = NewKey(buttonE)
+	keys[5] = NewKey(buttonF)
+	keys[6] = NewKey(buttonGb)
+	keys[7] = NewKey(buttonG)
+	keys[8] = NewKey(buttonAb)
+	keys[9] = NewKey(buttonA)
+	keys[10] = NewKey(buttonBb)
+	keys[11] = NewKey(buttonB)
 }
