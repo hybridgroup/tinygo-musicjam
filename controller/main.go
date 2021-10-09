@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/hybridgroup/tinymusicjam/controller/commands"
+	"github.com/hybridgroup/tinymusicjam/controller/makeybutton"
 )
 
 const (
@@ -26,7 +27,7 @@ var (
 	buttonBb machine.Pin = machine.D12
 	buttonB  machine.Pin = machine.D13
 
-	keys        [12]*Key
+	keys        [12]*makeybutton.Button
 	cmdr        *commands.Commander
 	midichannel uint8 = 0 // MIDI channels are 0-15 e.g. 1-16
 )
@@ -46,25 +47,25 @@ func main() {
 func readKeys() {
 	for key := 0; key < numberOfKeys; key++ {
 		switch keys[key].Get() {
-		case KeyPressed:
+		case makeybutton.Pressed:
 			cmdr.NoteOn(midichannel, uint8(middleC+key), 100)
-		case KeyReleased:
+		case makeybutton.Released:
 			cmdr.NoteOff(midichannel, uint8(middleC+key), 100)
 		}
 	}
 }
 
 func initKeys() {
-	keys[0] = NewKey(buttonC)
-	keys[1] = NewKey(buttonDb)
-	keys[2] = NewKey(buttonD)
-	keys[3] = NewKey(buttonEb)
-	keys[4] = NewKey(buttonE)
-	keys[5] = NewKey(buttonF)
-	keys[6] = NewKey(buttonGb)
-	keys[7] = NewKey(buttonG)
-	keys[8] = NewKey(buttonAb)
-	keys[9] = NewKey(buttonA)
-	keys[10] = NewKey(buttonBb)
-	keys[11] = NewKey(buttonB)
+	keys[0] = makeybutton.NewButton(buttonC)
+	keys[1] = makeybutton.NewButton(buttonDb)
+	keys[2] = makeybutton.NewButton(buttonD)
+	keys[3] = makeybutton.NewButton(buttonEb)
+	keys[4] = makeybutton.NewButton(buttonE)
+	keys[5] = makeybutton.NewButton(buttonF)
+	keys[6] = makeybutton.NewButton(buttonGb)
+	keys[7] = makeybutton.NewButton(buttonG)
+	keys[8] = makeybutton.NewButton(buttonAb)
+	keys[9] = makeybutton.NewButton(buttonA)
+	keys[10] = makeybutton.NewButton(buttonBb)
+	keys[11] = makeybutton.NewButton(buttonB)
 }
