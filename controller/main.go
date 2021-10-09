@@ -26,7 +26,7 @@ var (
 	buttonBb machine.Pin = machine.D12
 	buttonB  machine.Pin = machine.D13
 
-	keys        [12]Key
+	keys        [12]*Key
 	cmdr        *commands.Commander
 	midichannel uint8 = 0 // MIDI channels are 0-15 e.g. 1-16
 )
