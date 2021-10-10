@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/hybridgroup/tinymusicjam/router/commands"
+	"github.com/hybridgroup/tinymusicjam/router/midi"
 	"go.bug.st/serial"
 )
 
@@ -14,7 +14,7 @@ var (
 	deviceid int
 	port     string
 	sp       serial.Port
-	cmdr     *commands.Commander
+	stream   *midi.Stream
 	msg      [3]byte
 )
 
@@ -31,8 +31,8 @@ func main() {
 	sp, _ = serial.Open(port, &serial.Mode{BaudRate: 9600})
 	reader := bufio.NewReader(sp)
 
-	// open commander connection to MIDI
-	cmdr = commands.NewCommander(int(deviceid))
+	// open connection to MIDI
+	stream = midi.NewStream(int(deviceid))
 
 	// start listening for MIDI messages coming from serial port
 	for {
@@ -42,7 +42,7 @@ func main() {
 		}
 
 		if n > 0 {
-			cmdr.WriteShort(msg[:])
+			stream.WriteShort(msg[:])
 		}
 	}
 }

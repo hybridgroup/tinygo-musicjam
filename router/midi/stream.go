@@ -1,4 +1,4 @@
-package commands
+package midi
 
 import (
 	"fmt"
@@ -7,12 +7,12 @@ import (
 	"github.com/rakyll/portmidi"
 )
 
-// Commander sends the actual MIDI commands
-type Commander struct {
+// Stream sends the actual MIDI commands
+type Stream struct {
 	out *portmidi.Stream
 }
 
-func NewCommander(id int) *Commander {
+func NewStream(id int) *Stream {
 	err := portmidi.Initialize()
 	if err != nil {
 		panic(err)
@@ -24,9 +24,9 @@ func NewCommander(id int) *Commander {
 		log.Fatal(err)
 	}
 
-	return &Commander{out: out}
+	return &Stream{out: out}
 }
 
-func (c *Commander) WriteShort(msg []byte) {
-	c.out.WriteShort(int64(msg[0]), int64(msg[1]), int64(msg[2]))
+func (s *Stream) WriteShort(msg []byte) {
+	s.out.WriteShort(int64(msg[0]), int64(msg[1]), int64(msg[2]))
 }
