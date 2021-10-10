@@ -8,10 +8,12 @@ By running an AU host program such as Hosting AU along with a software synthesiz
 
 Controller is intended to run directly on Arduino to send MIDI commands via serial interface.
 
-To build/flash on Arduino:
+There are several different kinds of controllers in the `examples` folder.
+
+To build/flash the `onenote` example on Arduino:
 
         cd controller
-        tinygo flash -target arduino .
+        tinygo flash -target arduino ./examples/onenote/
 
 ## Router
 
@@ -21,9 +23,11 @@ You must be running a program that can host AU or VST plugins, and also a soft s
 
 For example, Hosting AU (http://ju-x.com/hostingau.html) works well with Surge (https://surge-synthesizer.github.io/).
 
-First, flash your controller. Then run Hosting AU, and activate Surge on "Track A".
+First, flash your controller as described above. Then run Hosting AU, and activate Surge on "Track A".
 
 Now you can run the `router` as follows:
 
         cd router
         go run . -port /dev/cu.XXX -device=0
+
+Have fun!
