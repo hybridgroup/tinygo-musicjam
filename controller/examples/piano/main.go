@@ -6,11 +6,12 @@ import (
 
 	"github.com/hybridgroup/tinymusicjam/controller/makeybutton"
 	"github.com/hybridgroup/tinymusicjam/controller/midi"
+	"github.com/hybridgroup/tinymusicjam/controller/notes"
 )
 
 const (
 	numberOfKeys = 1
-	middleC      = 60
+	keyOfMusic   = notes.C
 )
 
 var (
@@ -48,9 +49,9 @@ func readKeys() {
 	for key := 0; key < numberOfKeys; key++ {
 		switch keys[key].Get() {
 		case makeybutton.Pressed:
-			sender.NoteOn(midichannel, uint8(middleC+key), 100)
+			sender.NoteOn(midichannel, uint8(keyOfMusic+key), 100)
 		case makeybutton.Released:
-			sender.NoteOff(midichannel, uint8(middleC+key), 100)
+			sender.NoteOff(midichannel, uint8(keyOfMusic+key), 100)
 		}
 	}
 }
