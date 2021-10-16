@@ -34,14 +34,18 @@ Make music using your own Arduino-based customized MIDI controller using audio s
 └────────────────────────────┘      └────────────────────────────────────────────────┘
 
   Arduino                             Computer
-  
+
 ```
 
 By running a AU or VST host program such as Hosting AU along with a software synthesizer such as Surge, the MIDI router will forward MIDI commands from a Arduino Uno connected via serial interface to the virtual instrument.
 
 ## Installation
 
-You will need to install Go and TinyGo to compile the code.
+You will need to install both Go and TinyGo to compile the code.
+
+https://golang.org/
+
+https://tinygo.org/
 
 You will also need to install audio programs on your local computer in order to produce beautiful music.
 
@@ -74,15 +78,23 @@ To build/flash the `onenote` example on Arduino:
 
 ## Router
 
-Router is intended to run on notebook computer to connect via serial to controller, and then forward the MIDI commands to a specific MIDI device.
+The MIDI Router is intended to run on your notebook computer to connect via serial to controller, and then forward the MIDI commands to a specific MIDI device.
 
 You must be running a program that can host AU or VST plugins, and also a soft synth.
 
-First, flash your controller as described above. Then run Hosting AU, and activate Surge on "Track A".
+First, flash your controller as described above.
+
+Then run run your AU or VST hosting software on your computer.
+
+If you are using Hosting AU, now activate the Surge software synth on "Track A".
 
 Now you can run the `router` as follows:
 
         cd router
         go run . -port /dev/cu.XXX -device=0
+
+Make sure to substitute the correct port in the command above based on how it appears to your own computer.
+
+Now you should be able to trigger sounds on your computer by using your Arduino MIDI controller.
 
 Have fun!
