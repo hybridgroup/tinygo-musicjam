@@ -3,31 +3,38 @@
 Make music using your own Arduino-based customized MIDI controller using audio software running on your notebook computer.
 
 ```
-┌────────────────────────┐          ┌──────────────────────┐
-│                        │          │                      │
-│                        │          │                      │
-│     MIDI Controller    │          │     MIDI Router      │
-│                        ├──────────►                      │
-│                        │          │                      │
-│                        │          │                      │
-│                        │          │                      │
-│                        │          │                      │
-└────────────────────────┘          └──────────┬───────────┘
-                                               │
-                                               │
-                                               │
-                                               │
-                                               │
-                                    ┌──────────▼───────────┐
-                                    │                      ├─────────────────────┐
-                                    │                      │                     │
-                                    │    AU or VST Host    │   Software Synth    │
-                                    │                      │                     │
-                                    │                      ├─────────────────────┘
-                                    │                      │
-                                    │                      │
-                                    │                      │
-                                    └──────────────────────┘
+┌────────────────────────────┐      ┌────────────────────────────────────────────────┐
+│                            │      │                                                │
+│ ┌────────────────────────┐ │      │ ┌──────────────────────┐                       │
+│ │                        │ │      │ │                      │                       │
+│ │                        │ │      │ │                      │                       │
+│ │     MIDI Controller    │ │      │ │     MIDI Router      │                       │
+│ │                        ├─┼──────┼─►                      │                       │
+│ │                        │ │      │ │                      │                       │
+│ │                        │ │      │ │                      │                       │
+│ │                        │ │      │ │                      │                       │
+│ │                        │ │      │ │                      │                       │
+│ └────────────────────────┘ │      │ └──────────┬───────────┘                       │
+│                            │      │            │                                   │
+│                            │      │            │                                   │
+│                            │      │            │                                   │
+│                            │      │            │                                   │
+│                            │      │            │                                   │
+│                            │      │ ┌──────────▼───────────┐                       │
+│                            │      │ │                      ├─────────────────────┐ │
+│                            │      │ │                      │                     │ │
+│                            │      │ │    AU or VST Host    │   Software Synth    │ │
+│                            │      │ │                      │                     │ │
+│                            │      │ │                      ├─────────────────────┘ │
+│                            │      │ │                      │                       │
+│                            │      │ │                      │                       │
+│                            │      │ │                      │                       │
+│                            │      │ └──────────────────────┘                       │
+│                            │      │                                                │
+└────────────────────────────┘      └────────────────────────────────────────────────┘
+
+  Arduino                             Computer
+  
 ```
 
 By running a AU or VST host program such as Hosting AU along with a software synthesizer such as Surge, the MIDI router will forward MIDI commands from a Arduino Uno connected via serial interface to the virtual instrument.
